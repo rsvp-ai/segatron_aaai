@@ -37,7 +37,7 @@ We have uploaded following finetuned checkpoints to the huggingace models:
 
 - Please refer to [segatron-xl/README.md](segatron-xl/README.md) for details.
 
-![image-20201213122915570](../../Library/Application Support/typora-user-images/image-20201213122915570.png)
+![image-20201213122915570](./imgs/image-20201213122915570.png)
 
 ### 2. GLUE and Machine Reading Comprehension
 
@@ -45,14 +45,14 @@ We have uploaded following finetuned checkpoints to the huggingace models:
 
 - Please refer to [transformers/README.md](transformers/README.md) for details.
 
-![image-20201213122906064](../../Library/Application Support/typora-user-images/image-20201213122906064.png)
+![image-20201213122906064](./imgs/image-20201213122906064.png)
 
 ### 3. SST
 
 - The source code is in the `sentence-transformers` folder, which is based on [Sentence-Transformer](https://github.com/UKPLab/sentence-transformers)'s repository.
 - Please refer to [sentence-transformers/README.md](sentence-transformers/README.md) for details.
 
-![image-20201213122841703](../../Library/Application Support/typora-user-images/image-20201213122841703.png)
+![image-20201213122841703](./imgs/image-20201213122841703.png)
 
 ## Citation
 
