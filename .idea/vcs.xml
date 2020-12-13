@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/bert-uncased-base-50k" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/rsvpsegatransformer-xl-large" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/segabert-large" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/segabert-uncased-base-50k" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/segatransformer-xl-base" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/segatransformer-xl-large" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/checkpoints/sentence-segabert-large" vcs="Git" />
+  </component>
+</project>

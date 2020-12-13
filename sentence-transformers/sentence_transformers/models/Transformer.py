@@ -1,0 +1,129 @@
+from torch import nn
+import sys
+sys.path.insert(0,'/home/user/project/segatron/transformers')
+from transformers import SegaBertModel, BertTokenizer, BertConfig
+import torch
+# from transformers import AutoModel, AutoTokenizer, AutoConfig
+import json
+from typing import List, Dict, Optional
+import os
+
+
+class Transformer(nn.Module):
+    """Huggingface AutoModel to generate token embeddings.
+    Loads the correct class, e.g. BERT / RoBERTa etc.
+
+    :param model_name_or_path: Huggingface models name (https://huggingface.co/models)
+    :param max_seq_length: Truncate any inputs longer than max_seq_length
+    :param model_args: Arguments (key, value pairs) passed to the Huggingface Transformers model
+    :param cache_dir: Cache dir for Huggingface Transformers to store/load models
+    :param tokenizer_args: Arguments (key, value pairs) passed to the Huggingface Tokenizer model
+    :param tokenizer_args: Dict with parameters which are passed to the tokenizer.
+    """
+    def __init__(self, model_name_or_path: str, max_seq_length: int = 128,
+                 model_args: Dict = {}, cache_dir: Optional[str] = None,
+                 tokenizer_args: Dict = {}, sega: bool = False):
+        super(Transformer, self).__init__()
+        self.config_keys = ['max_seq_length','sega']
+        self.max_seq_length = max_seq_length
+        self.sega = sega
+
+        # config = AutoConfig.from_pretrained(model_name_or_path, **model_args, cache_dir=cache_dir)
+        # self.auto_model = AutoModel.from_pretrained(model_name_or_path, config=config, cache_dir=cache_dir)
+        # self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path,
+        #                                                cache_dir=cache_dir,
+        #                                                **tokenizer_args)
+
+        config = BertConfig.from_pretrained(model_name_or_path, **model_args, cache_dir=cache_dir)
+        # if sega:
+        self.auto_model = SegaBertModel.from_pretrained(model_name_or_path, config=config, cache_dir=cache_dir)
+        # else:
+        #     self.auto_model = BertModel.from_pretrained(model_name_or_path, config=config, cache_dir=cache_dir)
+        self.tokenizer = BertTokenizer.from_pretrained(model_name_or_path,
+                                                       cache_dir=cache_dir,
+                                                       **tokenizer_args)
+
+    def forward(self, features):
+        """Returns token_embeddings, cls_token"""
+        if self.sega:
+            input_ids = {'input_id':features['input_ids'], 'para_pos':features['para_pos'],
+                         'sent_pos':features['sent_pos'], 'token_pos':features['token_pos']}
+            del features['sent_pos']
+            del features['para_pos']
+            del features['token_pos']
+            features['input_ids'] = input_ids
+        output_states = self.auto_model(**features)
+        output_tokens = output_states[0]
+
+        cls_tokens = output_tokens[:, 0, :]  # CLS token is first token
+        features.update({'token_embeddings': output_tokens, 'cls_token_embeddings': cls_tokens, 'attention_mask': features['attention_mask']})
+
+        if self.auto_model.config.output_hidden_states:
+            all_layer_idx = 2
+            if len(output_states) < 3: #Some models only output last_hidden_states and all_hidden_states
+                all_layer_idx = 1
+
+            hidden_states = output_states[all_layer_idx]
+            features.update({'all_layer_embeddings': hidden_states})
+
+        return features
+
+    def get_word_embedding_dimension(self) -> int:
+        return self.auto_model.config.hidden_size
+
+    def tokenize(self, text: str) -> List[int]:
+        """
+        Tokenizes a text and maps tokens to token-ids
+        """
+        return self.tokenizer.convert_tokens_to_ids(self.tokenizer.tokenize(text))
+
+    def get_sentence_features(self, tokens: List[int], pad_seq_length: int):
+        """
+        Convert tokenized sentence in its embedding ids, segment ids and mask
+
+        :param tokens:
+            a tokenized sentence
+        :param pad_seq_length:
+            the maximal length of the sequence. Cannot be greater than self.sentence_transformer_config.max_seq_length
+        :return: embedding ids, segment ids and mask for the sentence
+        """
+        pad_seq_length = min(pad_seq_length, self.max_seq_length) + 3 #Add space for special tokens
+        if self.sega:
+            text_sent_pos = [0]*len(tokens)
+            text_para_pos = [0]*len(tokens)
+            text_token_pos = list(range(len(tokens)))
+            features = self.tokenizer.prepare_for_model(tokens, text_para_pos=text_para_pos, text_sent_pos=text_sent_pos,
+                                                        text_token_pos=text_token_pos, max_length=pad_seq_length,
+                                                        pad_to_max_length=True, return_tensors='pt')
+            # features['para_pos'][0] = 0
+            if not text_token_pos:
+                features['token_pos'] = torch.zeros_like(features['token_type_ids'])
+                features['token_pos'][0][1] = 1
+                features['sent_pos'] = torch.zeros_like(features['token_type_ids'])
+                features['para_pos'] = torch.zeros_like(features['token_type_ids'])
+        else:
+            features = self.tokenizer.prepare_for_model(tokens, max_length=pad_seq_length,
+                                                        pad_to_max_length=True, return_tensors='pt')
+        return features
+
+    def get_config_dict(self):
+        return {key: self.__dict__[key] for key in self.config_keys}
+
+    def save(self, output_path: str):
+        self.auto_model.save_pretrained(output_path)
+        self.tokenizer.save_pretrained(output_path)
+
+        with open(os.path.join(output_path, 'sentence_bert_config.json'), 'w') as fOut:
+            json.dump(self.get_config_dict(), fOut, indent=2)
+
+    @staticmethod
+    def load(input_path: str):
+        with open(os.path.join(input_path, 'sentence_bert_config.json')) as fIn:
+            config = json.load(fIn)
+        return Transformer(model_name_or_path=input_path, **config)
+
+
+
+
+
+
