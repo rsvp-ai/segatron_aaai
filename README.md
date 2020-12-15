@@ -15,8 +15,8 @@ To use this repo, please install NVIDIA APEX. We recommand using this [docker](h
 
 We have uploaded following finetuned checkpoints to the huggingace models:
 
-- [bert-base-50k](https://huggingface.co/rsvp-AI-ca/bert-uncased-base-50k)
-- [segabert-base-50k](https://huggingface.co/rsvp-AI-ca/segabert-uncased-base-50k)
+- [bert-base-500k](https://huggingface.co/rsvp-AI-ca/bert-uncased-base-50k)
+- [segabert-base-500k](https://huggingface.co/rsvp-AI-ca/segabert-uncased-base-50k)
 - [segabert-large](https://huggingface.co/rsvp-AI-ca/segabert-large)
 - [sentence-segabert-large](https://huggingface.co/rsvp-AI-ca/sentence-segabert-large)
 - [segatron-xl-base](https://huggingface.co/rsvp-AI-ca/segatransformer-xl-base)
