@@ -1,4 +1,6 @@
 # Segatron
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This repo contains codes and pre-trained models for our paper 
 
 > [Segatron: Segment-aware Transformer for Language Modeling and Understanding](https://arxiv.org/abs/2004.14996)
