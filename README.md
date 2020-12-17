@@ -63,7 +63,7 @@ Please cite [the AAAI 2021 paper]((https://arxiv.org/abs/2004.14996)):
 ```tex
 @article{bai2020segabert,
   title={Segatron: Segment-Aware Transformer for Language Modeling and Understanding},
-  author={Bai, He and Shi, Peng and Lin, Jimmy and Yuqing Xie and Tan, Luchen and Xiong, Kun and Gao, Wen and Li, Ming},
+  author={Bai, He and Shi, Peng and Lin, Jimmy and Yuqing Xie, and Tan, Luchen and Xiong, Kun and Gao, Wen and Li, Ming},
   journal={arXiv preprint arXiv:2004.14996},
   year={2020}
 }
