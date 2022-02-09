@@ -61,11 +61,14 @@ We have uploaded following checkpoints to the huggingace models:
 Please cite [the AAAI 2021 paper]((https://arxiv.org/abs/2004.14996)):
 
 ```tex
-@article{bai2020segabert,
+@inproceedings{bai2021segatron,
   title={Segatron: Segment-Aware Transformer for Language Modeling and Understanding},
-  author={Bai, He and Shi, Peng and Lin, Jimmy and Yuqing Xie, and Tan, Luchen and Xiong, Kun and Gao, Wen and Li, Ming},
-  journal={arXiv preprint arXiv:2004.14996},
-  year={2020}
+  author={Bai, He and Shi, Peng and Lin, Jimmy and Xie, Yuqing and Tan, Luchen and Xiong, Kun and Gao, Wen and Li, Ming},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={35},
+  number={14},
+  pages={12526--12534},
+  year={2021}
 }
 ```
 
