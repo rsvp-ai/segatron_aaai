@@ -15,7 +15,7 @@ To use this repo, please install NVIDIA APEX. We recommand using this [docker](h
 
 ## Download Checkpoints
 
-We have uploaded following finetuned checkpoints to the huggingace models:
+We have uploaded following checkpoints to the huggingace models:
 
 - [bert-base-500k](https://huggingface.co/rsvp-AI-ca/bert-uncased-base-50k)
 - [segabert-base-500k](https://huggingface.co/rsvp-AI-ca/segabert-uncased-base-50k)
